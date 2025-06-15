@@ -2,10 +2,11 @@
 import { Product } from "@/generated/prisma";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 
 function ProductCard({ product }: { product: Product }) {
   return (
-    <div className="border border-gray-200 rounded-lg p-4">
+    <Card className="pt-0 overflow-hidden">
       <div className="relative aspect-video">
         <Image
           src={product.image}
@@ -15,10 +16,12 @@ function ProductCard({ product }: { product: Product }) {
           fill
         />
       </div>
-      <h2 className="text-lg font-semibold">{product.name}</h2>
-      <p className="text-gray-600">{formatPrice(product.price)}</p>
-      <p className="text-gray-500">{product.description}</p>
-    </div>
+      <CardHeader>
+        <CardTitle>{product.name}</CardTitle>
+        <CardDescription>{ product.description}</CardDescription>
+      </CardHeader>
+      <CardFooter>{ formatPrice(product.price)}</CardFooter>
+    </Card>
   );
 }
 
