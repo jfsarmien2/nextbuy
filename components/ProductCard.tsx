@@ -3,9 +3,11 @@ import { Product } from "@/generated/prisma";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import Link from "next/link";
 
 function ProductCard({ product }: { product: Product }) {
   return (
+   <Link href={`/product/${product.slug}`}>
     <Card className="pt-0 overflow-hidden">
       <div className="relative aspect-video">
         <Image
@@ -22,6 +24,7 @@ function ProductCard({ product }: { product: Product }) {
       </CardHeader>
       <CardFooter>{ formatPrice(product.price)}</CardFooter>
     </Card>
+   </Link>
   );
 }
 
