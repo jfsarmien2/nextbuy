@@ -38,6 +38,7 @@ async function main() {
                 "https://images.unsplash.com/photo-1599605571400-84c8410dc889?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             categoryId: electronics.id,
             slug: "wireless-bluetooth-headphone",
+            inventory: 5
         },
         {
             id: "2",
@@ -49,6 +50,7 @@ async function main() {
                 "https://images.unsplash.com/photo-1629339837617-7069ce9e7f6b?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             categoryId: electronics.id,
             slug: "smart-fiteness-watch",
+            inventory: 50,
         },
         {
             id: "3",
@@ -60,6 +62,7 @@ async function main() {
                 "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             categoryId: electronics.id,
             slug: "gaming-laptop",
+            inventory: 20,
         },
         {
             id: "4",
@@ -70,6 +73,7 @@ async function main() {
                 "https://images.unsplash.com/photo-1707241358597-bafcc8a8e73d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             categoryId: home.id,
             slug: "coffee-maker",
+            inventory: 30
         },
         {
             id: "5",
@@ -81,6 +85,7 @@ async function main() {
                 "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             categoryId: home.id,
             slug: "office-chair",
+            inventory: 2
         },
         {
             id: "6",
@@ -91,6 +96,7 @@ async function main() {
             image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
             categoryId: electronics.id,
             slug: "wireless-headphone",
+            inventory: 10
         },
         {
             id: "7",
@@ -101,6 +107,7 @@ async function main() {
             image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
             categoryId: electronics.id,
             slug: "smart-watch",
+            inventory: 25
         },
     ];
 
