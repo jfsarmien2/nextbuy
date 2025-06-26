@@ -1,3 +1,4 @@
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -43,11 +44,18 @@ async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
     notFound();
   }
 
+  const breadcrumbsItems = [
+    { label: 'Products', href: '/' },
+    { label: 'Category', href: `/category/${product?.Category?.slug}` },
+    { label: product.name, href: `/product/${product?.slug}`, active: true },
+  ];
+
   await new Promise((resolve) => setTimeout(resolve, 3000));
 
   return (
     <main className="container mx-auto p-4">
-      <Card className="max-w-3xl mx-auto">
+      <Breadcrumbs items={breadcrumbsItems}/>
+      <Card>
         <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="relative rounded-lg overflow-hidden h-[200px] md:h-[400px]">
               {product.image && 

@@ -17,7 +17,7 @@ function Navbar() {
         <div className="container mx-auto flex h-16 items-center justify-between p-2 md:p-4">
               <div>
                   <div className="flex items-center gap-6">
-                      <Link href="/" className="text-2xl font-bold hidden md:block">Store</Link>
+                      <Link href="/" className="text-2xl font-bold hidden md:block">NextBuy</Link>
                       <nav className="hidden md:flex items-center gap-6">
                         {categories.map((category) => (
                             <Link
