@@ -60,7 +60,7 @@ async function HomePage(props: { searchParams: SearchParams }) {
           {Array.from({ length: totalPages }, (_, index) => (
             <PaginationItem key={index}>
               <PaginationLink
-                className={page === index + 1 ? "active" : ""}
+                isActive={page === index + 1}
                 href={`?page=${index + 1}`}
               >
                 {index + 1}
