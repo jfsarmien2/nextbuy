@@ -11,6 +11,7 @@ import {
 import { Suspense } from "react";
 import ProductSkeleton from "./ProductSkeleton";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { ProductListServerWrapper } from "@/components/ProductListServerWrapper";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -49,7 +50,8 @@ async function HomePage(props: { searchParams: SearchParams }) {
     <main className="container mx-auto p-4">
       <Breadcrumbs items={[{label: 'Products', href: '/', active: true}]}/>
       <Suspense key={page} fallback={<ProductSkeleton />}>
-        <Products page={page} />
+        {/* <Products page={page} /> */}
+        <ProductListServerWrapper params={{page, pageSize}}/>
       </Suspense>
       <Pagination className="mt-8">
         <PaginationContent>

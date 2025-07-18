@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import ProductSkeleton from "../../ProductSkeleton";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ProductListServerWrapper } from "@/components/ProductListServerWrapper";
 
 type CategoryPageProps = {
     params: Promise<{ slug: string }>;
@@ -74,13 +75,14 @@ async function CategoryPage({ params, searchParams }: CategoryPageProps) {
     return (
         <>
             <Breadcrumbs items={breadcrumbs} />
-            <div className="flex gap-3 text-sm mb-8">
+            {/* <div className="flex gap-3 text-sm mb-8">
                 <Link href={`/search/${slug}`}>Latest</Link>
                 <Link href={`/search/${slug}?sort=price-asc`}>Price: Low to High</Link>
                 <Link href={`/search/${slug}?sort=price-desc`}>Price: High to Low</Link>
-            </div>
+            </div> */}
             <Suspense key={`${slug}-${sort}`} fallback={<ProductSkeleton />}>
-                <Products slug={slug} sort={sort} />
+                {/* <Products slug={slug} sort={sort} /> */}
+                <ProductListServerWrapper params={{slug, sort}}/>
             </Suspense>
         </>
     );

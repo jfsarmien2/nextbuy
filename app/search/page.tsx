@@ -3,12 +3,21 @@ import ProductCard from "@/components/ProductCard";
 import { prisma } from "@/lib/prisma";
 import { Suspense } from "react";
 import ProductSkeleton from "../ProductSkeleton";
+import { ProductListServerWrapper } from "@/components/ProductListServerWrapper";
 
 type SearchPageProps = {
     searchParams: Promise<{ query?: string; sort?: string }>;
 };
 
-async function Products({ query }: { query: string }) {
+async function Products({ query, sort }: { query: string; sort?: string; }) {
+
+  let orderBy: Record<string, "asc" | "desc"> | undefined = undefined;
+
+    if (sort === "price-asc") {
+        orderBy = { price: "asc" };
+    } else if (sort === "price-desc") {
+        orderBy = { price: "desc" };
+    }
 
   const products = await prisma.product.findMany({
     where: {
@@ -17,6 +26,7 @@ async function Products({ query }: { query: string }) {
         { description: { contains: query, mode: 'insensitive' } },
       ],
     },
+    ...(orderBy ? { orderBy } : {}),
     take: 10
   });
 
@@ -38,6 +48,7 @@ async function Products({ query }: { query: string }) {
 async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const query = params.query?.trim() || "";
+  const sort = params.sort || "";
    
   const breadcrumbs = [
     { label: 'Products', href: '/' },
@@ -48,10 +59,11 @@ async function SearchPage({ searchParams }: SearchPageProps) {
   <main className="container mx-auto p-4">
       <Breadcrumbs items={breadcrumbs} />
       <Suspense
-        key={query}
+        key={`${query}-${sort}`}
         fallback={ <ProductSkeleton />}
         >
-        <Products query={query} />
+        {/* <Products query={query} sort={sort} /> */}
+        <ProductListServerWrapper params={{query, sort}}/>
       </Suspense>
     </main>
   )
