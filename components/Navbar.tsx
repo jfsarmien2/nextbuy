@@ -4,6 +4,9 @@ import { Button } from "./ui/button";
 import { Search, ShoppingCart } from "lucide-react";
 import MobileNav from "./mobile-nav";
 import SearchInput from "./SearchInput";
+import { CartIndicator } from "./CartIndicator";
+import { Suspense } from "react";
+import { CartIndicatorSkeleton } from "./CartIndicatorSkeleton";
 
 export const categories = [
     { id: 1, name: "Electronics", href: "/search/electronics" },
@@ -44,11 +47,9 @@ function Navbar() {
                           <Search className="w-5 h-5"/>
                       </Link>
                   </Button>
-                  <Button variant="ghost" size="icon" asChild>
-                      <Link href="/cart">
-                          <ShoppingCart className="w-5 h-5"/>
-                      </Link>
-                  </Button>
+                  <Suspense fallback={<CartIndicatorSkeleton />}>
+                    <CartIndicator />
+                  </Suspense>
                   <ModeToggle />
               </div>
         </div>
