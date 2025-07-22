@@ -7,7 +7,7 @@ interface ProductListServerWrapperProps {
 
 
 export async function ProductListServerWrapper({ params }: ProductListServerWrapperProps) {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
     const products = await getProducts(params);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     return <ProductList products={products}/>
 }
