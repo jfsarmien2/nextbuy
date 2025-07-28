@@ -1,3 +1,4 @@
+import OrderStatusBadge from "@/components/OrderStatusBadge";
 import { Badge } from "@/components/ui/badge";
 import { getCart, OrderWithItemsAndProducts } from "@/lib/actions";
 import { formatPrice } from "@/lib/utils";
@@ -6,19 +7,6 @@ import { formatPrice } from "@/lib/utils";
 interface OrderSummaryProps { 
     order: OrderWithItemsAndProducts
 }
-
-function StatusBadge({ status }: { status: string }) {
-    const statusMapping: Record<string, string> = {
-        pending: "Pending",
-        pending_payment: "Pending Payment",
-        failed: "Failed",
-        paid: "Paid",
-    };
-    return (
-        <Badge variant="outline">{statusMapping[status] || status}</Badge>
-    );
-}
-
 
 export default async function OrderSummary({ order }: OrderSummaryProps) {
 
@@ -48,7 +36,7 @@ export default async function OrderSummary({ order }: OrderSummaryProps) {
             <div className="text-sm text-muted-foreground">
                 <div className="flex items-center justify-between border-b pb-1 mb-3">
                     <p>Status</p>
-                    <StatusBadge status={order.status} />
+                    <OrderStatusBadge status={order.status} />
                 </div>
             </div>
 

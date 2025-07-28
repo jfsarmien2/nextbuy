@@ -11,10 +11,12 @@ export async function GET(req: NextRequest) {
 
     // Here you would typically fetch the session details from Stripe
     // and render a success page with the order details.
+    let orderId: string | undefined = undefined;
     try {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-        const orderId = session.metadata?.orderId;
+        orderId = session.metadata?.orderId;
+
         if (!orderId) {
             notFound();
         }
@@ -27,10 +29,10 @@ export async function GET(req: NextRequest) {
            notFound();
         }
         
-        if (order.status === "pending") { 
+        if (order.status === "pending") {
             await prisma.order.update({
                 where: { id: order.id },
-                data: { status: "payment_processed" },
+                data: { status: "paid" },
             });
         }
 
@@ -38,5 +40,5 @@ export async function GET(req: NextRequest) {
         console.error("Error fetching checkout session:", error);
         notFound();
     }
-    return redirect("");
+    return orderId ? redirect(`/order/${orderId}`) : notFound();
 }

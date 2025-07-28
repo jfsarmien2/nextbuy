@@ -11,10 +11,12 @@ export async function GET(req: NextRequest) {
 
     // Here you would typically fetch the session details from Stripe
     // and render a success page with the order details.
+    let orderId: string | undefined = undefined;
     try {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-        const orderId = session.metadata?.orderId;
+        orderId = session.metadata?.orderId;
+
         if (!orderId) {
             notFound();
         }
@@ -34,11 +36,9 @@ export async function GET(req: NextRequest) {
             });
         }
 
-        return redirect(`/`);
-
     } catch (error) {
         console.error("Error fetching checkout session:", error);
         notFound();
     }
-    return redirect("");
+    return orderId ? redirect(`/order/${orderId}`) : notFound();
 }
