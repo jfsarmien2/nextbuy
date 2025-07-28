@@ -1,11 +1,30 @@
 import CartEntry from "@/components/CartEntry";
 import CartSummary from "@/components/CartSummary";
+import { Button } from "@/components/ui/button";
 import { getCart } from "@/lib/actions";
-import { formatPrice } from "@/lib/utils";
+import { processCheckout, ProcessCheckoutResponse } from "@/lib/order";
+import { redirect } from "next/navigation";
 
 export default async function CartPage() {
     const cart = await getCart();
     await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    const handleCheckout = async () => { 
+        "use server";
+        // Implement checkout logic here
+        let result: ProcessCheckoutResponse | null = null;
+        
+        try {
+            result = await processCheckout();
+        } catch (error) {
+            console.error("Error processing checkout:", error);
+        }
+
+        if(result) {
+            redirect(result.sessionUrl);
+        }
+    }
+
     return (
         <main className="container mx-auto p-4">
             {!cart || cart.items.length === 0 ? (
@@ -23,6 +42,11 @@ export default async function CartPage() {
                             ))}
                         </div>
                         <CartSummary />
+                        <form action={handleCheckout}>
+                            <Button size="lg" className="w-full mt-4">
+                               Proceed to Checkout
+                            </Button>
+                        </form>
                     </>
             )}
         </main>

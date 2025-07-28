@@ -34,13 +34,13 @@ export async function createStripeCheckoutSession(order: OrderWithItemsAndProduc
             payment_method_types: ['card'],
             line_items: lineItems,
             mode: 'payment',
-            success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/order/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart?cancel=true`,
+            success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
             metadata: {
                 orderId: order.id,
             },
         });
-        return { sessionId: session.id, url: session.url };
+        return { sessionId: session.id, sessionUrl: session.url };
     } catch (error) {
         //1. Optional: Change order status to failed
         console.error("Error creating Stripe checkout session:", error);

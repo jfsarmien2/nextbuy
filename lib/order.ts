@@ -1,12 +1,16 @@
 "use server";
 
 import { cookies } from "next/headers";
-import {  getCart } from "./actions";
+import {  getCart, OrderWithItemsAndProducts } from "./actions";
 import { prisma } from "./prisma";
 import { createStripeCheckoutSession } from "./stripe";
 
+export type ProcessCheckoutResponse = {
+    sessionUrl: string;
+    order: OrderWithItemsAndProducts
+}
 
-export async function processCheckout() {
+export async function processCheckout(): Promise<ProcessCheckoutResponse | null> {
     const cart = await getCart();
 
     if (!cart || cart.items.length === 0) {
@@ -67,10 +71,10 @@ export async function processCheckout() {
         }
 
         //3. Create a Stripe checkout session
-        const { sessionId, url } = await createStripeCheckoutSession(fullOrder);
+        const { sessionId, sessionUrl } = await createStripeCheckoutSession(fullOrder);
 
         //4. Return the session url and handle any errors
-        if (!sessionId || !url) { 
+        if (!sessionId || !sessionUrl) {
             throw new Error("Failed to create Stripe checkout session");
         }
         //5. Store the session ID in the order metadata and change the order status
@@ -84,7 +88,10 @@ export async function processCheckout() {
         // Clear the cart cookie
         (await cookies()).delete("cartId");
 
-        return order;
+        return {
+            sessionUrl,
+            order: fullOrder, // Return the full order details if needed
+        };
     } catch (error) {
         //1. Optional: Change order status to failed
         if (orderId && error instanceof Error && error.message.includes("Stripe")) { 
