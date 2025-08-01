@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
                 where: { id: orderId },
                 data: {
                     status: "paid",
-                    stripePaymentIntentId: session.payment_intent as string,
+                    stripePaymentIntentId: session.payment_intent?.toString(),
                 },
             })
         } else { 

@@ -1,10 +1,12 @@
-import { PrismaClient, Product } from "../generated/prisma";
+import { hashPassword } from "@/lib/auth";
+import { PrismaClient, Product, User } from "../generated/prisma";
 
 const prisma = new PrismaClient();
 
 async function main() {
     await prisma.product.deleteMany();
     await prisma.category.deleteMany();
+    await prisma.user.deleteMany();
 
     const electronics = await prisma.category.create({
         data: {
@@ -116,6 +118,38 @@ async function main() {
             data: product,
         });
     }
+
+    const users: User[] = [
+        {
+            id: "1",
+            email: "admin@example.com",
+            name: "Admin User",
+            password: "password123", // In a real application, this should be hashed
+            role: "admin",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
+        {
+            id: "2",
+            email: "user@example.com",
+            name: "Regular User",
+            password: "password123", // In a real application, this should be hashed
+            role: "user",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
+    ];
+
+    for (const user of users) {
+        const hashedPassword = await hashPassword(user.password!);
+        await prisma.user.create({
+            data: {
+                ...user,
+                password: hashedPassword,
+            },
+        });
+    }
+
 }
 
 main()
