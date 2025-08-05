@@ -9,15 +9,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { SignInSchema, SignInSchemaType } from "@/lib/schemas";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
+
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const { update: updateSession } = useSession();
+
   const form = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -28,15 +34,31 @@ export default function SignInPage() {
 
   const onSubmit = async (data: SignInSchemaType) => {
     // Handle sign-in logic here, e.g., call an API to authenticate the user
-    console.log("Form submitted:", data);
+    setError(null);
 
-    const result = await signIn("credentials", {
+    try {
+      const result = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false
-    });
+      });
 
-    console.log(result);
+      if (result?.error) {
+        if (result.error === "CredentialsSignin") {
+          setError("Invalid email or password.");
+        } else {
+          setError("An error occurred during sign in.");
+        }
+      } else { 
+        await updateSession();
+        router.push("/");
+      }
+      
+    } catch (err) {
+      console.log("Sign in error: ",err);
+      setError("An error occurred during sign in.");
+    }
+
   };
 
   return (
@@ -52,11 +74,18 @@ export default function SignInPage() {
               href="/auth/signup"
               className="font-medium text-primary hover:underline"
             >
-              create a new account
+              Create a new account
             </Link>
           </CardDescription>
         </CardHeader>
         <CardContent>
+
+          {error && (
+            <p className="mb-4 text-sm text-destructive text-center">
+              { error }
+            </p>
+          )}
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -95,7 +124,8 @@ export default function SignInPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
+
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                 Sign In
               </Button>
             </form>

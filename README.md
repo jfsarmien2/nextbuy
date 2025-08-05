@@ -1,6 +1,6 @@
-# NEXTBUY Storefront
+# NextBuy Storefront
 
-NEXTBUY Storefront is a modern, full-stack e-commerce application built as a learning project to explore and implement cutting-edge web development technologies. This project leverages the latest features of the Next.js ecosystem, with a strong emphasis on scalability, performance, type safety, and modern development practices.
+NextBuy Storefront is a modern, full-stack e-commerce application built as a learning project to explore and implement cutting-edge web development technologies. This project leverages the latest features of the Next.js ecosystem, with a strong emphasis on scalability, performance, type safety, and modern development practices.
 
 ## Tech Stack
 

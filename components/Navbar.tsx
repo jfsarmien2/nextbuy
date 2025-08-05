@@ -7,6 +7,7 @@ import SearchInput from "./SearchInput";
 import { CartIndicator } from "./CartIndicator";
 import { Suspense } from "react";
 import { CartIndicatorSkeleton } from "./CartIndicatorSkeleton";
+import AuthStatus from "./AuthStatus";
 
 export const categories = [
     { id: 1, name: "Electronics", href: "/search/electronics" },
@@ -42,11 +43,12 @@ function Navbar() {
               </div>
               
               <div className="flex items-center gap-0">
-                  <Button variant="ghost" size="icon" asChild>
+                  <Button variant="ghost" size="icon" asChild className="sm:hidden">
                       <Link href="/search">
                           <Search className="w-5 h-5"/>
                       </Link>
                   </Button>
+                  <AuthStatus />
                   <Suspense fallback={<CartIndicatorSkeleton />}>
                     <CartIndicator />
                   </Suspense>
