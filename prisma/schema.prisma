@@ -66,6 +66,8 @@ model Order {
   status                String      @default("pending")
   created_at            DateTime    @default(now())
   updated_at            DateTime    @updatedAt
+  userId                String?
+  user                  User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 
 model OrderItem {
@@ -91,4 +93,5 @@ model User {
   role      String   @default("user") // e.g., "user", "admin"
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  orders    Order[]
 }

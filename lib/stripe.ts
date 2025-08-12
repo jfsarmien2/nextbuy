@@ -38,6 +38,7 @@ export async function createStripeCheckoutSession(order: OrderWithItemsAndProduc
             cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
             metadata: {
                 orderId: order.id,
+                ...(order.userId && {userId: order.userId})
             },
         });
         return { sessionId: session.id, sessionUrl: session.url };
