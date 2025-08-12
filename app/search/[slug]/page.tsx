@@ -1,10 +1,9 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
-import ProductCard from "@/components/ProductCard";
+// import ProductCard from "@/components/ProductCard";
 import { prisma } from "@/lib/prisma";
 import { Suspense } from "react";
 import ProductSkeleton from "../../ProductSkeleton";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { ProductListServerWrapper } from "@/components/ProductListServerWrapper";
 
 type CategoryPageProps = {
@@ -12,42 +11,70 @@ type CategoryPageProps = {
     searchParams: Promise<{ sort: string }>;
 };
 
-async function Products({ slug, sort }: { slug: string; sort?: string }) {
-    let orderBy: Record<string, "asc" | "desc"> | undefined = undefined;
-    if (sort === "price-asc") {
-        orderBy = { price: "asc" };
-    } else if (sort === "price-desc") {
-        orderBy = { price: "desc" };
-    }
+// async function Products({ slug, sort }: { slug: string; sort?: string }) {
+//     let orderBy: Record<string, "asc" | "desc"> | undefined = undefined;
+//     if (sort === "price-asc") {
+//         orderBy = { price: "asc" };
+//     } else if (sort === "price-desc") {
+//         orderBy = { price: "desc" };
+//     }
 
-    const products = await prisma.product.findMany({
+//     const products = await prisma.product.findMany({
+//         where: {
+//             Category: {
+//                 slug,
+//             },
+//         },
+//         ...(orderBy ? { orderBy } : {}),
+//         take: 10,
+//     });
+
+//     await new Promise((resolve) => setTimeout(resolve, 3000));
+
+//     if (products.length === 0) {
+//         return (
+//             <div className="text-center text-muted-foreground">
+//                 No products found
+//             </div>
+//         );
+//     }
+
+//     return (
+//         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+//             {products.map((product) => (
+//                 <ProductCard key={product.id} product={product} />
+//             ))}
+//         </div>
+//     );
+// }
+
+export async function generateMetadata({
+    params,
+  }: {
+    params: Promise<{ slug: string }>;
+  }) {
+    const { slug } = await params;
+    const category = await prisma.category.findUnique({
         where: {
-            Category: {
-                slug,
-            },
+            slug
         },
-        ...(orderBy ? { orderBy } : {}),
-        take: 10,
+        select: {
+            name: true,
+            slug: true
+        }
     });
-
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    if (products.length === 0) {
-        return (
-            <div className="text-center text-muted-foreground">
-                No products found
-            </div>
-        );
+  
+    if (!category) {
+      return {};
     }
-
-    return (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-            ))}
-        </div>
-    );
-}
+  
+    return {
+      title: category.name,
+      openGraph: {
+        title: category.name,
+      },
+    };
+  }
 
 async function CategoryPage({ params, searchParams }: CategoryPageProps) {
     const { slug } = await params;

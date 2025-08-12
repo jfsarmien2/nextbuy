@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search } from "lucide-react";
 import MobileNav from "./mobile-nav";
 import SearchInput from "./SearchInput";
 import { CartIndicator } from "./CartIndicator";
@@ -39,7 +39,9 @@ function Navbar() {
                   </div>
               </div>
               <div className="hidden md:block w-full mx-4 md:mx-8">
-                  <SearchInput />
+                  <Suspense>
+                   <SearchInput />
+                  </Suspense>
               </div>
               
               <div className="flex items-center gap-0">

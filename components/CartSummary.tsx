@@ -1,7 +1,5 @@
 import { getCart } from "@/lib/actions";
 import { formatPrice } from "@/lib/utils";
-import { Button } from "./ui/button";
-import Link from "next/link";
 
 export default async function CartSummary() {
     const cart = await getCart();

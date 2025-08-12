@@ -1,12 +1,10 @@
 import { AddToCartButton } from "@/components/AddToCartButton";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getProductBySlug } from "@/lib/actions";
 import { formatPrice } from "@/lib/utils";
-import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -43,6 +41,20 @@ async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
 
   if (!product) {
     notFound();
+  }
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.image,
+    "description": product.description,
+     offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: "USD",
+      availability: product.inventory > 0 ? "InStock" : "OutOfStock",
+    },
   }
 
   const breadcrumbsItems = [
@@ -99,6 +111,10 @@ async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
           </div>
         </CardContent>
       </Card>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </main>
   );
 }

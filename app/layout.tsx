@@ -16,8 +16,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NextBuy",
-  description: "E-commerce store built with Next.js and Tailwind CSS",
+  title: {
+    default: "NextBuy Storefront",
+    template: "%s | NextBuy Storefront",
+  },
+  description: "A simple e-commerce store built with Next.js and Tailwind CSS",
+  openGraph: {
+    title: "NextBuy Storefront",
+    description:
+      "A simple e-commerce store built with Next.js and Tailwind CSS",
+    url: process.env.NEXT_PUBLIC_URL,
+    siteName: "NextBuy Storefront",
+  },
 };
 
 export default function RootLayout({

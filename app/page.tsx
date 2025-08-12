@@ -1,4 +1,4 @@
-import ProductCard from "@/components/ProductCard";
+// import ProductCard from "@/components/ProductCard";
 import { prisma } from "@/lib/prisma";
 import {
   Pagination,
@@ -12,31 +12,30 @@ import { Suspense } from "react";
 import ProductSkeleton from "./ProductSkeleton";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { ProductListServerWrapper } from "@/components/ProductListServerWrapper";
-import { stripe } from "@/lib/stripe";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 const pageSize = 3;
 
-async function Products({ page }: { page: number }) {
-  const skip = (page - 1) * pageSize;
+// async function Products({ page }: { page: number }) {
+//   const skip = (page - 1) * pageSize;
 
-  const products = await prisma.product.findMany({
-    skip,
-    take: pageSize,
-  });
+//   const products = await prisma.product.findMany({
+//     skip,
+//     take: pageSize,
+//   });
 
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  return (
-    <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </>
-  );
-}
+//   await new Promise((resolve) => setTimeout(resolve, 3000));
+//   return (
+//     <>
+//       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+//         {products.map((product) => (
+//           <ProductCard key={product.id} product={product} />
+//         ))}
+//       </div>
+//     </>
+//   );
+// }
 
 async function HomePage(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;

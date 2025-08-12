@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ShoppingCart } from "lucide-react";
-import { getCart } from "@/lib/actions";
+
 
 export async function CartIndicatorSkeleton() {
     return (

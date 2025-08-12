@@ -1,6 +1,5 @@
 import OrderStatusBadge from "@/components/OrderStatusBadge";
-import { Badge } from "@/components/ui/badge";
-import { getCart, OrderWithItemsAndProducts } from "@/lib/actions";
+import { OrderWithItemsAndProducts } from "@/lib/actions";
 import { formatPrice } from "@/lib/utils";
 
 

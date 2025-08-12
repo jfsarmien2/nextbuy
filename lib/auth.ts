@@ -1,8 +1,7 @@
 import NextAuth, {  Session, User } from "next-auth"
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from "bcryptjs";
-import { SignInSchema, SignUpSchema, SignUpSchemaType } from "./schemas";
-import { z } from 'zod';
+import { SignInSchema } from "./schemas";
 import { prisma } from "./prisma";
 import { JWT } from "next-auth/jwt";
 
