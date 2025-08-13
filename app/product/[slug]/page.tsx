@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getProductBySlug } from "@/lib/actions";
+import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -35,9 +36,24 @@ export async function generateMetadata({
   };
 }
 
+export const revalidate = 5;
+
+export async function generateStaticParams() {
+  const products = await prisma.product.findMany({
+    select: {
+      slug: true,
+    },
+  });
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
+}
+
 async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
+
+  console.log(`Fetching product ${slug}`);
 
   if (!product) {
     notFound();
@@ -63,7 +79,6 @@ async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
     { label: product.name, href: `/product/${product?.slug}`, active: true },
   ];
 
-  await new Promise((resolve) => setTimeout(resolve, 3000));
 
   return (
     <main className="container mx-auto p-4">

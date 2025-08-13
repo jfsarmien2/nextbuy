@@ -6,19 +6,22 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Minus, Plus, X } from "lucide-react";
 import { useState } from "react";
+import { useCart } from "@/lib/useCart";
 
 interface CartEntryProps { 
     cartItem: CartItemWithProducts;
 }
 
 export default function CartEntry({ cartItem }: CartEntryProps) { 
-     const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { revalidateCart } = useCart();
     const handleSetProductQuantity = async (quantity: number) => {
         // Logic to increment the quantity of the cart item
         setIsLoading(true);
         try {
             // Call the API to update the quantity
             await setProductQuantity(cartItem.product.id, quantity);
+            revalidateCart();
         } catch (error) {
             console.error("Error updating cart item quantity:", error);
         } finally {
