@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma";
 import { prisma } from "./prisma";
 import { cookies } from "next/headers";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { createProductsCacheKey, createProductsTags } from "./cache-keys";
 
 export interface GetProductParams { 
     query?: string;
@@ -80,6 +81,39 @@ export async function getProducts({
         skip,
         take,
     });
+}
+
+export async function getProductsCountCached() {
+  return unstable_cache(() => prisma.product.count(), ["products-count"], {
+    tags: ["products"],
+    revalidate: 3600,
+  })();
+}
+
+export async function getProductsCached({
+  query,
+  slug,
+  sort,
+  page = 1,
+  pageSize = 3,
+}: GetProductParams) {
+  const cacheKey = createProductsCacheKey({
+    search: query,
+    categorySlug: slug,
+    sort,
+    page,
+    limit: pageSize,
+  });
+  const cacheTags = createProductsTags({ search: query, categorySlug: slug });
+
+  return unstable_cache(
+    () => getProducts({ query, slug, sort, page, pageSize }),
+    [cacheKey],
+    {
+      tags: cacheTags,
+      revalidate: 3600,
+    }
+  )();
 }
 
 export async function findCartFromCookie(): Promise<CartWithProducts | null> { 

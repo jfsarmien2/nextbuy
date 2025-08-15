@@ -1,5 +1,4 @@
 // import ProductCard from "@/components/ProductCard";
-import { prisma } from "@/lib/prisma";
 import {
   Pagination,
   PaginationContent,
@@ -12,6 +11,7 @@ import { Suspense } from "react";
 import ProductSkeleton from "./ProductSkeleton";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { ProductListServerWrapper } from "@/components/ProductListServerWrapper";
+import { getProductsCountCached } from "@/lib/actions";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -42,7 +42,7 @@ async function HomePage(props: { searchParams: SearchParams }) {
 
   const page = Number(searchParams.page) || 1;
 
-  const total = await prisma.product.count();
+  const total = await getProductsCountCached();
 
   const totalPages = Math.ceil(total / pageSize);
 
@@ -55,9 +55,12 @@ async function HomePage(props: { searchParams: SearchParams }) {
       </Suspense>
       <Pagination className="mt-8">
         <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href={`?page=${page - 1}`} />
-          </PaginationItem>
+
+          {page > 1 && (
+            <PaginationItem>
+              <PaginationPrevious href={`?page=${page - 1}`} />
+            </PaginationItem>
+          )}
 
           {Array.from({ length: totalPages }, (_, index) => (
             <PaginationItem key={index}>
@@ -69,10 +72,13 @@ async function HomePage(props: { searchParams: SearchParams }) {
               </PaginationLink>
             </PaginationItem>
           ))}
+          
+          {page < totalPages && (
+            <PaginationItem>
+              <PaginationNext href={`?page=${page + 1}`} />
+            </PaginationItem>
+          )}
 
-          <PaginationItem>
-            <PaginationNext href={`?page=${page + 1}`} />
-          </PaginationItem>
         </PaginationContent>
       </Pagination>
     </main>

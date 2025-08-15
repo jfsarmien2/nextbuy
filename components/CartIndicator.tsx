@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/useCart";
-import { useEffect } from "react";
 
 function CartButton({ children }: { children: React.ReactNode }) {
   return (
